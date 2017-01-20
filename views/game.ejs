@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+  <title>Tokbox: Beer Bash</title>
+  <link href="resources/game.css" rel="stylesheet">
+  <script src="js/util.js"></script>
+  <script src="js/core.js"></script>
+  <script src="js/arm.js"></script>
+  <script src="js/thumb.js"></script>
+  <script src="js/mmu.js"></script>
+  <script src="js/io.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/video.js"></script>
+  <script src="js/video/proxy.js"></script>
+  <script src="js/video/software.js"></script>
+  <script src="js/irq.js"></script>
+  <script src="js/keypad.js"></script>
+  <script src="js/sio.js"></script>
+  <script src="js/savedata.js"></script>
+  <script src="js/gpio.js"></script>
+  <script src="js/gba.js"></script>
+  <script src="resources/xhr.js"></script>
+  <script src="js/tokbox-gba.js"></script>
+  <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script src="//static.opentok.com/v2/js/opentok.js"></script>
+</head>
+<body>
+  <h1 id="header">Tokbox Plays: </h1>
+  <div id="gba-container">
+    <canvas height="768" id="screen" width="1152"></canvas>
+    <section id="controls">
+      <div id="preload">
+        <button class="bigbutton" id="select" onclick="document.getElementById('loader').click();">Upload Game</button> <input accept=".gba" id="loader" onchange="run(this.files[0]);" type="file">
+        <button onclick="document.getElementById('saveloader').click()">Upload Save</button> <input id="saveloader" onchange="uploadSavedataPending(this.files[0]);" type="file">
+      </div>
+      <div class="hidden" id="ingame">
+        <button class="bigbutton" id="pause" onclick="togglePause()">PAUSE</button> <button class="bigbutton" onclick="reset()">RESET</button> <button onclick="gba.downloadSavedata()">Download Savegame</button> <button onclick="screenshot()">Screenshot</button> <label id="pixelated"><input onchange="setPixelated(this.checked)" type="checkbox"></label>
+        <p><label id="pixelated">Pixelated</label></p>
+        <div id="sound">
+          <input checked onchange="gba.audio.masterEnable = this.checked" type="checkbox">
+          <p>Sound</p><input max="1" min="0" onchange="setVolume(this.value)" oninput="setVolume(this.value)" step="any" type="range" value="1">
+        </div>
+        <p id="openDebug" onclick="enableDebug()">Debugger</p>
+      </div>
+    </section>
+  </div>
+  <div id="publisher" style="height:1px;width:1px;"></div>
+</body>
+<script>
+  var session;
+  var apiKey =  "<%= apiKey %>";
+  var sessionId =  "<%= sessionId %>";
+  var token =  "<%= token %>";
+  session = OT.initSession(apiKey, sessionId);
+  session.on('signal:control', function(event) {
+    // Simulate keypress using event.data, which should be the keyId
+    gbaInput({
+      type: 'keydown',
+      keyCode: inputKeyCode['KEYCODE_' + event.data]
+    });
+    setTimeout(function () {
+      gbaInput({
+        type: 'keyup',
+        keyCode: inputKeyCode['KEYCODE_' + event.data]
+      });
+    }, 100);
+  });
+
+  function startOTComponent () {
+    session.connect(token, function () {
+      session.publish(OT.initPublisher('publisher', {videoSource: 'screen'}));
+    });
+  }
+
+</script>
+</html>

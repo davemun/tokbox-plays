@@ -1,0 +1,88 @@
+button {
+  font-family: 'Calibri', 'Verdana', sans-serif;
+}
+
+#header {
+  font-size: 36px;
+  font-weight: bold;
+}
+
+#screen_container {
+  text-align: center;
+  margin: auto;
+  width: 80vw;
+  height: 75vh;
+}
+
+#screen {
+  margin-top: 0px;
+  margin-bottom: 20px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.controls {
+  margin: auto;
+  text-align: center;
+}
+
+#actions button {
+  padding: 4px 18px 6px;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+button {
+  margin: 6px;
+  background-color: #6A4883;
+  font-weight: bold;
+  font-size: 48px;
+  color: white;
+  text-shadow: 0 3px #433061;
+  padding: 4px 18px 6px;
+  border-radius: 10px 10px 10px 10px;
+  border: 0 solid rgba(0, 0, 0, 0.4);
+  border-width: 3px 1px 0px;
+  display: inline;
+  box-shadow: 0 2px 6px -1px rgba(0, 0, 0, 0.2) inset;
+}
+
+.hidden {
+  -moz-transform: rotateX(90deg) !important;
+  -webkit-transform: rotateX(90deg) !important;
+}
+
+.dead {
+  display: none;
+}
+
+input[type=file] {
+  opacity: 0 !important;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+input[type=range] {
+  width: 100px;
+  height: 14px;
+  margin: 2px;
+}
+
+#gba-container {
+  text-align: center;
+}
+
+#header {
+  text-align: center;
+}
+
+.OT_root {
+  width: 100% !important;
+  height: 100% !important;
+}
