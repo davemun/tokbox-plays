@@ -11,20 +11,22 @@
   <div id="screen_container">
     <div id="screen"></div>
   </div>
-  <span class="controls" id="actions">
-    <button onclick="pressButton('A')">A</button>
-    <button onclick="pressButton('B')">B</button>
-    <button onclick="pressButton('L')">L</button>
-    <button onclick="pressButton('R')">R</button>
-  </span>
-  <span class="controls">
-    <button onclick="pressButton('LEFT')">←</button>
-    <button onclick="pressButton('UP')">↑</button>
-    <button onclick="pressButton('RIGHT')">→</button>
-    <button onclick="pressButton('DOWN')">↓</button>
-    <button onclick="pressButton('START')">Start</button>
-    <button onclick="pressButton('SELECT')">Select</button>
-  </span>
+  <div class="controls">
+    <span id="actions">
+      <button onclick="pressButton('A')">A</button>
+      <button onclick="pressButton('B')">B</button>
+      <button onclick="pressButton('L')">L</button>
+      <button onclick="pressButton('R')">R</button>
+    </span>
+    <span>
+      <button onclick="pressButton('LEFT')">←</button>
+      <button onclick="pressButton('UP')">↑</button>
+      <button onclick="pressButton('RIGHT')">→</button>
+      <button onclick="pressButton('DOWN')">↓</button>
+      <button onclick="pressButton('START')">Start</button>
+      <button onclick="pressButton('SELECT')">Select</button>
+    </span>
+  </div>
 </body>
 <script>
   var apiKey =  "<%= apiKey %>";

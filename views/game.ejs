@@ -21,12 +21,14 @@
   <script src="js/gpio.js"></script>
   <script src="js/gba.js"></script>
   <script src="resources/xhr.js"></script>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script src="https://static.opentok.com/v2/js/opentok.js"></script>
+  <script src="js/highcharts.js"></script>
   <script src="js/tokbox-gba.js"></script>
-  <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
-  <script src="//static.opentok.com/v2/js/opentok.js"></script>
 </head>
 <body>
   <h1 id="header">Tokbox Plays: </h1>
+
   <div id="gba-container">
     <canvas height="768" id="screen" width="1152"></canvas>
     <section id="controls">
@@ -49,9 +51,11 @@
 </body>
 <script>
   var session;
+  var chart;
   var apiKey =  "<%= apiKey %>";
   var sessionId =  "<%= sessionId %>";
   var token =  "<%= token %>";
+  var signals = {};
   session = OT.initSession(apiKey, sessionId);
   session.on('signal:control', function(event) {
     // Simulate keypress using event.data, which should be the keyId
@@ -65,13 +69,83 @@
         keyCode: inputKeyCode['KEYCODE_' + event.data]
       });
     }, 100);
+    // Store signal input into buffer for activity chart
+    signals[event.data] = signals[event.data]++ || 1;
   });
 
-  function startOTComponent () {
-    session.connect(token, function () {
-      session.publish(OT.initPublisher('publisher', {videoSource: 'screen'}));
+  function renderSignalBuffer() {
+    var chartData = [];
+
+    Object.keys(signals).forEach(function(keycode) {
+      var seriesData = {
+        name: keycode,
+        data: []
+      };
+      seriesData.data.push(signals[keycode]);
+      chartData.push(seriesData);
     });
+
+    chartData = chartData.sort(function (pointA, pointB) {
+      return pointA.data - pointB;
+    });
+
+    new Highcharts.Chart({
+      chart: {
+        type: 'bar',
+        renderTo: 'activity-chart'
+      },
+      title: {
+        text: ''
+      },
+      xAxis: {
+        categories: ['Button'],
+        labels: {
+          enabled: false
+        },
+        lineWidth: 0,
+        minorGridLineWidth: 0,
+        lineColor: 'transparent',
+        minorTickLength: 0,
+        tickLength: 0
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          enabled: false
+        }
+      },
+      legend: {
+        enabled: false
+      },
+      plotOptions: {
+        series: {
+          stacking: 'normal',
+          dataLabels: {
+            enabled: true,
+            formatter: function () {return ('' + this.percentage).slice(0,4) + '% (' + this.series.name + ')'}
+          }
+        }
+      },
+      series: [{name:"A", data:[0]},{name:"A", data:[0]}]
+    });
+
+    // Empty signals stored
+    signals = {};
   }
 
+  function startOTComponent () {
+    OT.registerScreenSharingExtension('chrome', 'igbhhofmcadpoekohpfnekfbgmmponcf', 2);
+    session.connect(token, function () {
+      // var pub = OT.initPublisher('publisher', {
+      //   videoSource: 'screen',
+      //   audioSource: false,
+      //   insertMode: 'append'
+      // }, function () {
+      //   session.publish(pub);
+      // });
+      // $('div .OT_root').css('visibility', 'hidden');
+    });
+    // setInterval(renderSignalBuffer, 1000);
+  }
 </script>
 </html>

@@ -3,7 +3,6 @@ button {
 }
 
 #screen {
-  margin-top: 40px;
   margin-bottom: 20px;
   border-width: 5px;
   border-style: solid;
@@ -70,4 +69,5 @@ input[type=range] {
 
 #header {
   text-align: center;
+  margin: 0px;
 }
